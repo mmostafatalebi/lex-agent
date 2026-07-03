@@ -8,8 +8,6 @@ Usage::
     uv run python scripts/build_fixtures.py
 """
 
-from __future__ import annotations
-
 from dataclasses import dataclass
 from pathlib import Path
 

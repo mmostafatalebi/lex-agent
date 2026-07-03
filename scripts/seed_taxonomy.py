@@ -9,8 +9,6 @@ Usage::
     uv run python scripts/seed_taxonomy.py
 """
 
-from __future__ import annotations
-
 import hashlib
 
 from sqlalchemy import select
