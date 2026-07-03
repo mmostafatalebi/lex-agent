@@ -25,5 +25,8 @@ coverage.xml
 # uv
 # (uv.lock is committed intentionally)
 
+# Checkpointer data
+/.data/
+
 # OS
 .DS_Store

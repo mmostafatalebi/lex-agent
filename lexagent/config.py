@@ -5,7 +5,7 @@ code runs, so the package can be imported without a fully configured
 environment.
 """
 
-from pydantic import Field
+from pydantic import AliasChoices, Field
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -26,6 +26,11 @@ class Settings(BaseSettings):
     bedrock_max_retries: int = Field(default=3)
 
     database_url: str | None = Field(default=None)
+
+    checkpoint_path: str = Field(
+        default=".data/checkpoints.db",
+        validation_alias=AliasChoices("LEXAGENT_CHECKPOINT_PATH", "CHECKPOINT_PATH"),
+    )
 
 
 settings = Settings()
