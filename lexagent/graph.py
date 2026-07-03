@@ -1,9 +1,10 @@
-"""Linear LangGraph state machine for contract analysis.
+"""LangGraph state machine for contract analysis and human-reviewed redlining.
 
-The graph threads a contract from raw file bytes to a ranked list of typed flags:
-ingest, classify the document, classify clauses, analyze substantive clauses, and
-rank. Each node is wrapped so that a failure short-circuits the run (status set to
-``failed``) rather than partially proceeding.
+The graph threads a contract from raw file bytes to a ranked list of typed flags,
+pauses at human review via ``interrupt()``, and on resume drafts and validates a
+redline for every accepted flag. Analysis nodes are wrapped so a failure
+short-circuits the run (status set to ``failed``) rather than partially proceeding;
+the review node is left unwrapped so its ``GraphInterrupt`` can propagate.
 """
 
 import logging
@@ -13,16 +14,22 @@ from pathlib import Path
 from typing import Any, Protocol
 
 from langchain_core.runnables import RunnableConfig
+from langgraph.checkpoint.base import BaseCheckpointSaver
 from langgraph.graph import END, StateGraph
 from langgraph.graph.state import CompiledStateGraph
+from langgraph.types import Command
 
 from lexagent.bedrock import BedrockClient
-from lexagent.models import GraphState
+from lexagent.checkpoint import get_checkpointer
+from lexagent.models import Flag, GraphState, HumanDecision
 from lexagent.nodes.analyze_clause import analyze_clause
 from lexagent.nodes.classify_clauses import classify_clauses
 from lexagent.nodes.classify_document import classify_document
+from lexagent.nodes.draft_redlines import draft_redlines
+from lexagent.nodes.human_review import human_review
 from lexagent.nodes.ingest import IngestError, ingest
 from lexagent.nodes.rank import rank
+from lexagent.nodes.validate_redlines import validate_redlines
 
 logger = logging.getLogger(__name__)
 
@@ -63,6 +70,17 @@ def _guarded(name: str, fn: Callable[[GraphState], GraphState]) -> _ConfigNode:
     return wrapper
 
 
+def _plain(fn: Callable[[GraphState], GraphState]) -> _ConfigNode:
+    """Wrap a node without catching exceptions, so a GraphInterrupt propagates."""
+
+    def wrapper(state: GraphState, config: RunnableConfig) -> dict[str, Any]:
+        if state.status == "failed":
+            return {}
+        return _updates(fn(state))
+
+    return wrapper
+
+
 def _ingest_node(state: GraphState, config: RunnableConfig) -> dict[str, Any]:
     if state.status == "failed":
         return {}
@@ -78,8 +96,10 @@ def _ingest_node(state: GraphState, config: RunnableConfig) -> dict[str, Any]:
     return _updates(new_state)
 
 
-def build_graph(bedrock: BedrockClient) -> CompiledStateGraph[GraphState]:
-    """Build the analysis graph. The bedrock client is bound at build time."""
+def build_graph(
+    bedrock: BedrockClient, checkpointer: BaseCheckpointSaver[Any]
+) -> CompiledStateGraph[GraphState]:
+    """Build the analysis graph. The bedrock client and checkpointer bind at build time."""
     graph = StateGraph(GraphState)
     graph.add_node("ingest", _ingest_node)
     graph.add_node(
@@ -95,25 +115,76 @@ def build_graph(bedrock: BedrockClient) -> CompiledStateGraph[GraphState]:
         _guarded("analyze_clauses", partial(analyze_clause, bedrock=bedrock)),
     )
     graph.add_node("rank", _guarded("rank", rank))
+    graph.add_node("human_review", _plain(human_review))
+    graph.add_node(
+        "draft_redlines",
+        _guarded("draft_redlines", partial(draft_redlines, bedrock=bedrock)),
+    )
+    graph.add_node("validate_redlines", _guarded("validate_redlines", validate_redlines))
 
     graph.set_entry_point("ingest")
     graph.add_edge("ingest", "classify_document")
     graph.add_edge("classify_document", "classify_clauses")
     graph.add_edge("classify_clauses", "analyze_clauses")
     graph.add_edge("analyze_clauses", "rank")
-    graph.add_edge("rank", END)
+    graph.add_edge("rank", "human_review")
+    graph.add_edge("human_review", "draft_redlines")
+    graph.add_edge("draft_redlines", "validate_redlines")
+    graph.add_edge("validate_redlines", END)
 
-    return graph.compile()
+    return graph.compile(checkpointer=checkpointer)
 
 
-def run_analysis(path: Path, bedrock: BedrockClient | None = None) -> GraphState:
-    """Run the full analysis for a contract at ``path`` and return the final state."""
+def run_analysis(
+    path: Path,
+    thread_id: str,
+    bedrock: BedrockClient | None = None,
+    checkpointer: BaseCheckpointSaver[Any] | None = None,
+) -> dict[str, Any]:
+    """Run the analysis graph until an interrupt or completion.
+
+    Returns the LangGraph output dict. If interrupted, the output contains
+    ``__interrupt__`` with the review payload; if complete, it contains the
+    final state values.
+    """
     client = bedrock if bedrock is not None else BedrockClient()
-    compiled = build_graph(client)
+    saver = checkpointer if checkpointer is not None else get_checkpointer()
+    compiled = build_graph(client, saver)
     result = compiled.invoke(
-        GraphState(),
-        config={"configurable": {"source_path": str(path)}},
+        GraphState(thread_id=thread_id),
+        config={"configurable": {"thread_id": thread_id, "source_path": str(path)}},
     )
-    if isinstance(result, GraphState):
-        return result
-    return GraphState.model_validate(result)
+    return dict(result)
+
+
+def load_review_flags(
+    thread_id: str,
+    bedrock: BedrockClient | None = None,
+    checkpointer: BaseCheckpointSaver[Any] | None = None,
+) -> list[Flag]:
+    """Return the flags of a paused session so a resuming caller can review them."""
+    client = bedrock if bedrock is not None else BedrockClient()
+    saver = checkpointer if checkpointer is not None else get_checkpointer()
+    compiled = build_graph(client, saver)
+    snapshot = compiled.get_state({"configurable": {"thread_id": thread_id}})
+    values = snapshot.values
+    flags = values.get("flags", []) if isinstance(values, dict) else getattr(values, "flags", [])
+    return list(flags)
+
+
+def resume_analysis(
+    thread_id: str,
+    decisions: list[HumanDecision],
+    bedrock: BedrockClient | None = None,
+    checkpointer: BaseCheckpointSaver[Any] | None = None,
+) -> dict[str, Any]:
+    """Resume a paused analysis with the human's decisions."""
+    client = bedrock if bedrock is not None else BedrockClient()
+    saver = checkpointer if checkpointer is not None else get_checkpointer()
+    compiled = build_graph(client, saver)
+    payload = [decision.model_dump() for decision in decisions]
+    result = compiled.invoke(
+        Command(resume=payload),
+        config={"configurable": {"thread_id": thread_id}},
+    )
+    return dict(result)
