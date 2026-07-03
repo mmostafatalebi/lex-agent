@@ -1,5 +1,6 @@
 import io
 import json
+import re
 from pathlib import Path
 from typing import Any
 
@@ -124,3 +125,91 @@ def mock_retrieve_similar(mocker: MockerFixture) -> Any:
     return mocker.patch(
         "lexagent.nodes.analyze_clause.retrieve_similar", return_value=examples
     )
+
+
+_CLAUSE_TEXT_RE = re.compile(
+    r"--- BEGIN CLAUSE TEXT ---\n(.*)\n--- END CLAUSE TEXT ---", re.DOTALL
+)
+
+
+def make_analysis_dispatch(flags_per_clause: int = 1, redline_original_ok: bool = True) -> Any:
+    """Build a complete_json side effect covering every schema in the pipeline.
+
+    Analysis flags and redline drafts quote a genuine substring of the clause text
+    embedded in the prompt, so the substring gates pass unless ``redline_original_ok``
+    is set False (used to exercise the drop path).
+    """
+    from lexagent.models import ClauseType, DocumentType, RedlineDraft, Severity
+    from lexagent.nodes.analyze_clause import AnalysisResult, FlagDraft
+    from lexagent.nodes.classify_clauses import (
+        ClauseClassificationBatch,
+        ClauseClassificationEntry,
+    )
+    from lexagent.nodes.classify_document import DocumentClassification
+
+    def side_effect(
+        prompt: str,
+        schema: type,
+        system: str | None = None,
+        temperature: float = 0.0,
+        max_tokens: int = 4096,
+    ) -> tuple[Any, Any]:
+        if schema is DocumentClassification:
+            return (
+                DocumentClassification(document_type=DocumentType.MSA, reasoning="msa"),
+                make_usage(),
+            )
+        if schema is ClauseClassificationBatch:
+            ids = re.findall(r"\[(clause_\d+)\]", prompt)
+            entries = [
+                ClauseClassificationEntry(clause_id=cid, clause_type=ClauseType.LIABILITY)
+                for cid in ids
+            ]
+            return ClauseClassificationBatch(classifications=entries), make_usage()
+        if schema is AnalysisResult:
+            match = _CLAUSE_TEXT_RE.search(prompt)
+            assert match is not None
+            clause_text = match.group(1)
+            drafts = [
+                FlagDraft(
+                    risk_description="Risk found in clause",
+                    severity=Severity.IMPORTANT,
+                    verbatim_quote=clause_text[:40],
+                    reasoning="Grounded in a verbatim substring.",
+                )
+                for _ in range(flags_per_clause)
+            ]
+            return AnalysisResult(flags=drafts), make_usage()
+        if schema is RedlineDraft:
+            match = _CLAUSE_TEXT_RE.search(prompt)
+            assert match is not None
+            clause_text = match.group(1)
+            original = clause_text[:40] if redline_original_ok else "NOT PRESENT IN ANY CLAUSE"
+            return (
+                RedlineDraft(
+                    original_text=original,
+                    revised_text="Revised clause language.",
+                    justification="Resolves the flagged risk.",
+                ),
+                make_usage(),
+            )
+        raise AssertionError(f"unexpected schema: {schema}")
+
+    return side_effect
+
+
+@pytest.fixture
+def memory_checkpointer() -> Any:
+    from langgraph.checkpoint.memory import MemorySaver
+
+    return MemorySaver()
+
+
+@pytest.fixture
+def interactive_stdin(monkeypatch: pytest.MonkeyPatch) -> Any:
+    """Return a callable that feeds canned text to stdin for the interactive CLI."""
+
+    def _feed(text: str) -> None:
+        monkeypatch.setattr("sys.stdin", io.StringIO(text))
+
+    return _feed

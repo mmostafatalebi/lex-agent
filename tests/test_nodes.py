@@ -222,4 +222,4 @@ def test_rank_orders_by_severity_then_clause_order() -> None:
     state = GraphState(contract=contract, flags=flags)
     result = rank(state)
     assert [f.id for f in result.flags] == ["f2", "f4", "f3", "f1"]
-    assert result.status == "complete"
+    assert result.status == "awaiting_review"
