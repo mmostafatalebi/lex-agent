@@ -1,7 +1,7 @@
 """Clause-boundary chunker.
 
 Splits raw contract text into ``Clause`` objects while preserving exact
-character offsets into the source text. The invariant every downstream phase
+character offsets into the source text. The invariant every downstream stage
 depends on is::
 
     raw_text[clause.char_start:clause.char_end] == clause.text
