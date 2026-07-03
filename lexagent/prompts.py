@@ -5,7 +5,7 @@ are built as f-strings here rather than stored as raw templates so the shape of
 every model input is visible next to the data it consumes.
 """
 
-from lexagent.models import Clause, ClauseType, DocumentType
+from lexagent.models import Clause, ClauseType, DocumentType, Flag
 from lexagent.retrieve import RetrievedExample
 
 _DOCUMENT_TYPE_VALUES = ", ".join(dt.value for dt in DocumentType)
@@ -77,6 +77,29 @@ def analyze_clause_prompt(
         "verbatim_quote must be an exact substring of the clause text below, character "
         "for character. Do not paraphrase, normalize punctuation, or fix typos. If the "
         "clause is balanced and carries no material risk, return an empty list.\n\n"
+        "--- BEGIN CLAUSE TEXT ---\n"
+        f"{clause.text}\n"
+        "--- END CLAUSE TEXT ---"
+    )
+
+
+def draft_redline_prompt(clause: Clause, flag: Flag) -> str:
+    """Prompt for drafting a minimal-edit revision that resolves a single flag."""
+    return (
+        "You are a contracts attorney representing an independent contractor. Draft a "
+        "minimal-edit revision to the clause below that resolves the identified risk "
+        "while keeping the rest of the clause intact.\n\n"
+        f"Risk: {flag.risk_description}\n"
+        f"Severity: {flag.severity.value}\n"
+        f"Flagged passage: {flag.verbatim_quote}\n"
+        f"Analyst reasoning: {flag.reasoning}\n\n"
+        "Return original_text, revised_text, and justification. The original_text must "
+        "be an exact substring of the clause text below, character for character. Do "
+        "not paraphrase, normalize punctuation, or fix typos in original_text. Quote "
+        "only the specific passage that needs to change, not the whole clause. The "
+        "revised_text replaces exactly that passage and changes only what the risk "
+        "calls out. The justification is one or two sentences on what the revision "
+        "achieves.\n\n"
         "--- BEGIN CLAUSE TEXT ---\n"
         f"{clause.text}\n"
         "--- END CLAUSE TEXT ---"
