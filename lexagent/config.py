@@ -18,5 +18,14 @@ class Settings(BaseSettings):
 
     log_level: str = Field(default="INFO")
 
+    aws_region: str | None = Field(default=None)
+    aws_access_key_id: str | None = Field(default=None)
+    aws_secret_access_key: str | None = Field(default=None)
+    bedrock_model_id: str = Field(default="anthropic.claude-3-5-sonnet-20241022-v2:0")
+    bedrock_embedding_model_id: str = Field(default="amazon.titan-embed-text-v2:0")
+    bedrock_max_retries: int = Field(default=3)
+
+    database_url: str | None = Field(default=None)
+
 
 settings = Settings()
