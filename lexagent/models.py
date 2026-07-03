@@ -122,3 +122,4 @@ class GraphState(BaseModel):
         "failed",
     ] = "pending"
     error: str | None = None
+    total_cost_usd: float = 0.0
