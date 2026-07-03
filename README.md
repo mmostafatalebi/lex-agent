@@ -25,7 +25,9 @@ uv run pytest
 - A Docker Compose file for the local pgvector database.
 - A LangGraph state machine that runs a contract from raw file bytes to a ranked list of typed flags.
 - Per-clause risk analysis grounded in the taxonomy retrieval, with a verbatim-quote gate that drops flags whose supporting quote is not a literal substring of the source clause.
-- 42 tests, mypy strict, ruff clean.
+- A LangGraph `interrupt()` pauses the analysis after ranking so a human can accept or reject each flag. State persists to a SQLite checkpointer, so a session can resume after a full process restart.
+- A drafting node produces a `Redline` for every accepted flag, using the LLM to write a minimal-edit revised clause with a justification. Every redline is gated by a substring check against the source clause.
+- 58 tests, mypy strict, ruff clean.
 
 ## Local database
 
@@ -40,6 +42,20 @@ uv run python scripts/seed_taxonomy.py  # requires AWS credentials
 ```bash
 # requires AWS credentials, local Postgres up with taxonomy seeded
 uv run python scripts/run_analysis.py fixtures/sample_msa.pdf
+```
+
+## Review a contract
+
+```bash
+# interactive
+uv run python scripts/run_analysis.py fixtures/sample_msa.pdf
+
+# resume a paused session
+uv run python scripts/run_analysis.py --resume <thread_id>
+
+# non-interactive with a decisions file
+uv run python scripts/run_analysis.py fixtures/sample_msa.pdf \
+  --decisions decisions.json --output redlines.md
 ```
 
 ## Architecture
