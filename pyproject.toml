@@ -1,15 +1,22 @@
 [project]
 name = "lexagent"
 version = "0.1.0"
-description = "A LangGraph-based contract review agent for freelancers and small businesses."
+description = "A contract review agent for freelancers and small businesses."
 readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [
+    "alembic>=1.13",
+    "boto3>=1.34",
+    "botocore>=1.34",
+    "pgvector>=0.3",
+    "psycopg[binary]>=3.1",
     "pydantic>=2.6",
     "pydantic-settings>=2.2",
     "pypdf>=4.0",
     "python-docx>=1.1",
     "reportlab>=4.0",
+    "sqlalchemy>=2.0",
+    "tenacity>=8.2",
 ]
 
 [dependency-groups]
@@ -18,6 +25,8 @@ dev = [
     "pytest-cov>=4.1",
     "mypy>=1.8",
     "ruff>=0.4",
+    "pytest-mock>=3.12",
+    "pytest-postgresql>=5.0",
 ]
 
 [build-system]
@@ -29,7 +38,13 @@ packages = ["lexagent"]
 
 [tool.mypy]
 strict = true
-python_version = "3.11"
+# Analysis target matches the pinned interpreter; transitively installed stubs
+# (numpy via pgvector) require a 3.12 target to parse. Source stays 3.11-compatible.
+python_version = "3.12"
+
+[[tool.mypy.overrides]]
+module = ["boto3.*", "botocore.*", "pgvector.*"]
+ignore_missing_imports = true
 
 [tool.ruff]
 line-length = 100
@@ -39,4 +54,7 @@ select = ["E", "F", "I", "N", "UP", "B", "RUF"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
-addopts = "--cov=lexagent --cov-report=term-missing"
+markers = [
+    "integration: requires live external services (skipped by default)",
+]
+addopts = "--cov=lexagent --cov-report=term-missing -m 'not integration'"
