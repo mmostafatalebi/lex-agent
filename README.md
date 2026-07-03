@@ -23,7 +23,9 @@ uv run pytest
 - PostgreSQL + pgvector storing a taxonomy of canonical and risky clause examples across nine clause types.
 - A cosine-similarity retrieval helper that returns the most similar taxonomy examples for a given clause.
 - A Docker Compose file for the local pgvector database.
-- 30 tests, mypy strict, ruff clean.
+- A LangGraph state machine that runs a contract from raw file bytes to a ranked list of typed flags.
+- Per-clause risk analysis grounded in the taxonomy retrieval, with a verbatim-quote gate that drops flags whose supporting quote is not a literal substring of the source clause.
+- 42 tests, mypy strict, ruff clean.
 
 ## Local database
 
@@ -31,6 +33,13 @@ uv run pytest
 docker compose up -d
 uv run alembic upgrade head
 uv run python scripts/seed_taxonomy.py  # requires AWS credentials
+```
+
+## Analyze a contract
+
+```bash
+# requires AWS credentials, local Postgres up with taxonomy seeded
+uv run python scripts/run_analysis.py fixtures/sample_msa.pdf
 ```
 
 ## Architecture
