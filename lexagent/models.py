@@ -78,6 +78,19 @@ class Flag(BaseModel):
     suggested_redline: str | None = None
 
 
+class RedlineDraft(BaseModel):
+    """Structured output from the drafting LLM call.
+
+    Converted to a Redline after the original_text substring check passes.
+    """
+
+    model_config = ConfigDict(frozen=True)
+
+    original_text: str
+    revised_text: str
+    justification: str
+
+
 class HumanDecision(BaseModel):
     """The human reviewer's decision on a single flag."""
 
@@ -123,3 +136,4 @@ class GraphState(BaseModel):
     ] = "pending"
     error: str | None = None
     total_cost_usd: float = 0.0
+    thread_id: str | None = None
