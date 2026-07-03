@@ -21,4 +21,4 @@ def rank(state: GraphState) -> GraphState:
         )
 
     ordered = sorted(state.flags, key=sort_key)
-    return state.model_copy(update={"flags": ordered, "status": "complete"})
+    return state.model_copy(update={"flags": ordered, "status": "awaiting_review"})

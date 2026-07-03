@@ -11,6 +11,7 @@ from pydantic import BaseModel
 
 from lexagent.bedrock import BedrockClient
 from lexagent.models import Clause, ClauseType, DocumentType, Flag, GraphState, Severity
+from lexagent.nodes import normalized_contains
 from lexagent.prompts import analyze_clause_prompt
 from lexagent.retrieve import retrieve_similar
 
@@ -40,8 +41,8 @@ def _is_substantive(clause: Clause) -> bool:
 def _gate(
     drafts: list[FlagDraft], clause_text: str
 ) -> tuple[list[FlagDraft], list[FlagDraft]]:
-    good = [d for d in drafts if d.verbatim_quote in clause_text]
-    bad = [d for d in drafts if d.verbatim_quote not in clause_text]
+    good = [d for d in drafts if normalized_contains(clause_text, d.verbatim_quote)]
+    bad = [d for d in drafts if not normalized_contains(clause_text, d.verbatim_quote)]
     return good, bad
 
 
