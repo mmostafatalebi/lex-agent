@@ -1,0 +1,14 @@
+{
+  "data": {
+    "inferred_risk_category": "broad_confidentiality",
+    "is_match": true,
+    "reasoning": "stub keyword overlap"
+  },
+  "schema": "MatchDecision",
+  "usage": {
+    "input_cost_usd": 0.0006000000000000001,
+    "input_tokens": 200,
+    "output_cost_usd": 0.0012000000000000001,
+    "output_tokens": 80
+  }
+}

@@ -1,0 +1,23 @@
+[
+  {
+    "clause_type": "confidentiality",
+    "is_risky": false,
+    "notes": "Mutual duty with the customary exclusions and a defined survival period reflects standard, enforceable confidentiality terms.",
+    "similarity": 0.9,
+    "text": "Each party shall protect the other's confidential information with at least reasonable care and use it solely to perform this Agreement. These obligations survive for three (3) years after termination and do not apply to information that is public, already known, independently developed, or rightfully received from a third party."
+  },
+  {
+    "clause_type": "confidentiality",
+    "is_risky": false,
+    "notes": "A bounded definition plus a return-or-destroy obligation keeps confidentiality scoped and administrable for both sides.",
+    "similarity": 0.85,
+    "text": "Confidential Information means non-public information disclosed in writing and marked confidential, or disclosed orally and confirmed in writing within thirty days. On termination, the receiving party shall return or destroy the disclosing party's confidential information at the disclosing party's request."
+  },
+  {
+    "clause_type": "confidentiality",
+    "is_risky": true,
+    "notes": "A perpetual, unmarked, one-sided definition that bars use of residual skills effectively prevents the contractor from working elsewhere.",
+    "similarity": 0.8,
+    "text": "All information of any kind that Contractor learns or observes in connection with Client is Client's confidential information in perpetuity, whether or not marked. Contractor is prohibited from using any residual knowledge, including general skills and experience, for any other client at any time."
+  }
+]

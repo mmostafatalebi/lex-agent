@@ -1,0 +1,23 @@
+[
+  {
+    "clause_type": "dispute_resolution",
+    "is_risky": false,
+    "notes": "Escalation to negotiation before a neutral, mutually located arbitration keeps dispute resolution balanced and predictable.",
+    "similarity": 0.9,
+    "text": "The parties shall first attempt to resolve any dispute through good-faith negotiation. If unresolved within thirty (30) days, the dispute shall be settled by binding arbitration under the AAA Commercial Rules before a single arbitrator, seated in a location mutually agreed by the parties, with each party bearing its own costs."
+  },
+  {
+    "clause_type": "dispute_resolution",
+    "is_risky": false,
+    "notes": "A clear governing-law and venue clause with a mediation step and a prevailing-party fee provision is standard and reciprocal.",
+    "similarity": 0.85,
+    "text": "Any dispute shall be governed by the laws of the State of Delaware and resolved in the state or federal courts located there. The parties first agree to non-binding mediation, and the prevailing party in any subsequent litigation is entitled to recover its reasonable attorneys' fees."
+  },
+  {
+    "clause_type": "dispute_resolution",
+    "is_risky": true,
+    "notes": "Forcing arbitration in the client's home forum while making the contractor pay all costs and waive class rights creates a lopsided, deterrent process.",
+    "similarity": 0.8,
+    "text": "All disputes shall be resolved exclusively by binding arbitration seated in Client's home jurisdiction, applying that jurisdiction's law. Contractor waives any right to a jury trial and to participate in any class or collective action, and shall bear all costs and fees of the arbitration regardless of outcome."
+  }
+]

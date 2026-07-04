@@ -1,0 +1,19 @@
+{
+  "data": {
+    "flags": [
+      {
+        "reasoning": "Termination is one-sided and at will.",
+        "risk_description": "Termination is one-sided and at will.",
+        "severity": "important",
+        "verbatim_quote": "at any time, for any reason or no reason, effective immediately upon written notice to\nContractor. Contractor may not terminate this Agreeme"
+      }
+    ]
+  },
+  "schema": "AnalysisResult",
+  "usage": {
+    "input_cost_usd": 0.0006000000000000001,
+    "input_tokens": 200,
+    "output_cost_usd": 0.0012000000000000001,
+    "output_tokens": 80
+  }
+}

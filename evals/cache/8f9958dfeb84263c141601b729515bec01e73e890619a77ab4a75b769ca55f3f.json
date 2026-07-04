@@ -1,0 +1,19 @@
+{
+  "data": {
+    "flags": [
+      {
+        "reasoning": "Scope is vague and open-ended.",
+        "risk_description": "Scope is vague and open-ended.",
+        "severity": "important",
+        "verbatim_quote": "as needed, including but not\nlimited to such tasks, deliverables, and responsibilities as the Client may identify from time to time\nover the"
+      }
+    ]
+  },
+  "schema": "AnalysisResult",
+  "usage": {
+    "input_cost_usd": 0.0006000000000000001,
+    "input_tokens": 200,
+    "output_cost_usd": 0.0012000000000000001,
+    "output_tokens": 80
+  }
+}

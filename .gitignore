@@ -28,5 +28,8 @@ coverage.xml
 # Checkpointer data
 /.data/
 
+# The eval response cache is committed on purpose for reproducible offline runs.
+!evals/cache/
+
 # OS
 .DS_Store

@@ -1,0 +1,19 @@
+{
+  "data": {
+    "flags": [
+      {
+        "reasoning": "A three-year restriction is overbroad.",
+        "risk_description": "A three-year restriction is overbroad.",
+        "severity": "important",
+        "verbatim_quote": "three (3) years\nfollowing termination. Confidential information does not include information that is or becomes public\nthrough no fault of t"
+      }
+    ]
+  },
+  "schema": "AnalysisResult",
+  "usage": {
+    "input_cost_usd": 0.0006000000000000001,
+    "input_tokens": 200,
+    "output_cost_usd": 0.0012000000000000001,
+    "output_tokens": 80
+  }
+}

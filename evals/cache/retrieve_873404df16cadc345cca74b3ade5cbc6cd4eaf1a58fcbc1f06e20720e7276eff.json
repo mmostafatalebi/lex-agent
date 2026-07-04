@@ -1,0 +1,23 @@
+[
+  {
+    "clause_type": "ip_assignment",
+    "is_risky": false,
+    "notes": "Assignment is scoped to work created for the engagement and preserves the contractor's background IP, which is the balanced market standard.",
+    "similarity": 0.9,
+    "text": "Contractor assigns to Client all right, title, and interest in the deliverables created specifically for Client under the applicable statement of work. Contractor retains ownership of any pre-existing materials, tools, and know-how, and grants Client a perpetual, non-exclusive license to use those materials solely as embedded in the deliverables."
+  },
+  {
+    "clause_type": "ip_assignment",
+    "is_risky": false,
+    "notes": "Ties the assignment to payment and lets the contractor keep reusable, generic components, a fair allocation for professional services.",
+    "similarity": 0.85,
+    "text": "Upon full payment of all fees due, Contractor assigns to Client the copyright in the final deliverables accepted by Client. Contractor may retain and reuse general skills, methods, and non-client-specific components developed in the course of the work, provided no Client confidential information is disclosed."
+  },
+  {
+    "clause_type": "ip_assignment",
+    "is_risky": true,
+    "notes": "Sweeps in the contractor's pre-existing and unrelated IP, a classic overreaching grab that strips the contractor of assets never meant to be sold.",
+    "similarity": 0.8,
+    "text": "Contractor hereby irrevocably assigns to Client all intellectual property of every kind, including all works conceived before the Effective Date and all works developed during the term whether or not related to the services. Contractor waives all moral rights and agrees that Client owns any invention Contractor creates during the term."
+  }
+]

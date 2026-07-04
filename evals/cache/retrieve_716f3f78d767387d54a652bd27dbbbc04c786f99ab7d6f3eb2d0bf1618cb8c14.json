@@ -1,0 +1,23 @@
+[
+  {
+    "clause_type": "liability",
+    "is_risky": false,
+    "notes": "A mutual cap tied to fees with carve-outs for confidentiality and IP is the widely accepted allocation of risk for services work.",
+    "similarity": 0.9,
+    "text": "Except for breaches of confidentiality or infringement of intellectual property, each party's total liability under this Agreement shall not exceed the fees paid or payable in the twelve (12) months preceding the claim. Neither party is liable for indirect, incidental, or consequential damages."
+  },
+  {
+    "clause_type": "liability",
+    "is_risky": false,
+    "notes": "Caps liability at contract value while carving out indemnity and gross negligence, a reasonable and mutual limitation.",
+    "similarity": 0.85,
+    "text": "Each party's aggregate liability arising out of this Agreement is limited to the total fees paid under the applicable statement of work, and neither party shall be liable for lost profits or loss of data. This limitation does not apply to a party's indemnification obligations or gross negligence."
+  },
+  {
+    "clause_type": "liability",
+    "is_risky": true,
+    "notes": "Uncapped, one-directional liability with no exclusion of consequential damages exposes the contractor to losses far exceeding the contract value.",
+    "similarity": 0.8,
+    "text": "Contractor shall be liable for any and all damages, losses, costs, and expenses of any kind arising out of or relating to this Agreement, without limitation as to amount and regardless of the theory of liability. Contractor's liability is not limited to the fees paid under the applicable statement of work."
+  }
+]

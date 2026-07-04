@@ -1,0 +1,23 @@
+[
+  {
+    "clause_type": "scope_of_work",
+    "is_risky": false,
+    "notes": "Anchoring scope to a written SOW and requiring signed change orders prevents scope creep and keeps additional work compensated.",
+    "similarity": 0.9,
+    "text": "Contractor shall perform the services described in each statement of work, which defines the deliverables, milestones, and acceptance criteria. Any change to the scope, schedule, or fees must be agreed in a written change order signed by both parties before the additional work begins."
+  },
+  {
+    "clause_type": "scope_of_work",
+    "is_risky": false,
+    "notes": "Bounded acceptance testing and a defined number of revision rounds set clear expectations and protect the contractor from open-ended rework.",
+    "similarity": 0.85,
+    "text": "Deliverables are subject to acceptance testing against the criteria in the statement of work. Contractor shall provide up to two rounds of revisions to correct deficiencies identified in writing; revisions beyond that scope are billed at Contractor's standard hourly rate."
+  },
+  {
+    "clause_type": "scope_of_work",
+    "is_risky": true,
+    "notes": "Open-ended scope with unlimited free revisions and sole-discretion acceptance invites unbounded, uncompensated work.",
+    "similarity": 0.8,
+    "text": "Contractor shall perform whatever services Client reasonably requests from time to time related to the project, at no additional charge beyond the fixed fee. Client may request unlimited revisions until fully satisfied, and Contractor shall continue working until Client confirms acceptance in its sole discretion."
+  }
+]

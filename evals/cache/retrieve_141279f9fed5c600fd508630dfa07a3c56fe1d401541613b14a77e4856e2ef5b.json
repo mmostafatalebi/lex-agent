@@ -1,0 +1,23 @@
+[
+  {
+    "clause_type": "termination",
+    "is_risky": false,
+    "notes": "Symmetric convenience termination with payment for work performed treats both parties equally and protects earned fees.",
+    "similarity": 0.9,
+    "text": "Either party may terminate this Agreement for convenience on thirty (30) days' written notice. Upon termination, Client shall pay Contractor for all services performed and expenses incurred through the effective date of termination, including work in progress on a pro-rata basis."
+  },
+  {
+    "clause_type": "termination",
+    "is_risky": false,
+    "notes": "Termination for cause with a cure period and preserved payment rights is standard and even-handed.",
+    "similarity": 0.85,
+    "text": "Either party may terminate for material breach if the breaching party fails to cure within fifteen (15) days after written notice describing the breach. Termination does not relieve Client of its obligation to pay for services accepted before the effective date of termination."
+  },
+  {
+    "clause_type": "termination",
+    "is_risky": true,
+    "notes": "One-sided at-will termination that binds only the contractor and denies pay for unaccepted work in progress leaves the contractor exposed.",
+    "similarity": 0.8,
+    "text": "Client may terminate this Agreement at any time, for any reason or no reason, effective immediately upon notice. Contractor may not terminate prior to completion of all outstanding work. Client has no obligation to pay for any work in progress that has not been accepted as of the date of termination."
+  }
+]

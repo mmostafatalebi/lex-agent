@@ -1,0 +1,57 @@
+{
+  "data": {
+    "classifications": [
+      {
+        "clause_id": "clause_001",
+        "clause_type": "other"
+      },
+      {
+        "clause_id": "clause_002",
+        "clause_type": "payment_terms"
+      },
+      {
+        "clause_id": "clause_003",
+        "clause_type": "dispute_resolution"
+      },
+      {
+        "clause_id": "clause_004",
+        "clause_type": "ip_assignment"
+      },
+      {
+        "clause_id": "clause_005",
+        "clause_type": "confidentiality"
+      },
+      {
+        "clause_id": "clause_006",
+        "clause_type": "termination"
+      },
+      {
+        "clause_id": "clause_007",
+        "clause_type": "liability"
+      },
+      {
+        "clause_id": "clause_008",
+        "clause_type": "ip_assignment"
+      },
+      {
+        "clause_id": "clause_009",
+        "clause_type": "non_compete"
+      },
+      {
+        "clause_id": "clause_010",
+        "clause_type": "dispute_resolution"
+      },
+      {
+        "clause_id": "clause_011",
+        "clause_type": "other"
+      }
+    ]
+  },
+  "schema": "ClauseClassificationBatch",
+  "usage": {
+    "input_cost_usd": 0.0006000000000000001,
+    "input_tokens": 200,
+    "output_cost_usd": 0.0012000000000000001,
+    "output_tokens": 80
+  }
+}

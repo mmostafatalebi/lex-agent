@@ -1,0 +1,23 @@
+[
+  {
+    "clause_type": "non_compete",
+    "is_risky": false,
+    "notes": "A narrow, twelve-month non-solicit tied to actual accounts and confidential information protects legitimate interests without blocking the contractor's livelihood.",
+    "similarity": 0.9,
+    "text": "During the term and for twelve (12) months afterward, Contractor shall not solicit for employment any employee of Client with whom Contractor worked directly, nor solicit the specific Client accounts Contractor served, using Client confidential information. This restriction does not limit Contractor from serving other clients generally."
+  },
+  {
+    "clause_type": "non_compete",
+    "is_risky": false,
+    "notes": "A short, narrowly tailored restriction limited to the specific product and market is the kind of non-compete courts routinely enforce.",
+    "similarity": 0.85,
+    "text": "For six (6) months after termination, Contractor shall not provide services that are directly competitive with the specific product Contractor worked on, within the geographic markets where Client actively sells that product. Contractor remains free to work in all other fields and locations."
+  },
+  {
+    "clause_type": "non_compete",
+    "is_risky": true,
+    "notes": "A three-year, worldwide, whole-industry ban is grossly overbroad, likely unenforceable, and would prevent the contractor from working at all.",
+    "similarity": 0.8,
+    "text": "During the term and for three (3) years after termination, Contractor shall not, directly or indirectly, engage in or provide services to any business anywhere in the world that offers software, consulting, or technology services of any kind. Contractor agrees this restriction is reasonable and necessary."
+  }
+]

@@ -1,0 +1,23 @@
+[
+  {
+    "clause_type": "payment_terms",
+    "is_risky": false,
+    "notes": "Defines a clear net-30 timeline, a late fee, and limits withholding to good-faith disputes, protecting the contractor's cash flow.",
+    "similarity": 0.9,
+    "text": "Client shall pay each undisputed invoice within thirty (30) days of receipt. Amounts not paid when due accrue interest at 1.5% per month or the maximum rate permitted by law, whichever is lower. Client may withhold only those amounts it disputes in good faith, and shall pay all undisputed amounts on time."
+  },
+  {
+    "clause_type": "payment_terms",
+    "is_risky": false,
+    "notes": "Milestone billing with a deposit and a deemed-acceptance window gives both sides predictable, enforceable payment triggers.",
+    "similarity": 0.85,
+    "text": "Fees are payable in milestones as set out in the statement of work, with a 30% deposit due on signing and the balance due on acceptance of each milestone. Client shall notify Contractor of any milestone deficiency within ten (10) business days, failing which the milestone is deemed accepted and payable."
+  },
+  {
+    "clause_type": "payment_terms",
+    "is_risky": true,
+    "notes": "Provides no payment deadline, allows discretionary withholding, and adds a pay-when-paid condition that shifts the customer's credit risk onto the contractor.",
+    "similarity": 0.8,
+    "text": "Client shall pay Contractor following receipt and review of each invoice. Client reserves the right to withhold payment for any reason it deems appropriate, and no payment is due to Contractor until Client has itself been paid by its end customer for the related work."
+  }
+]
