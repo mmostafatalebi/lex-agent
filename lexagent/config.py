@@ -32,5 +32,10 @@ class Settings(BaseSettings):
         validation_alias=AliasChoices("LEXAGENT_CHECKPOINT_PATH", "CHECKPOINT_PATH"),
     )
 
+    eval_mode: str = Field(
+        default="auto",
+        validation_alias=AliasChoices("LEXAGENT_EVAL_MODE", "EVAL_MODE"),
+    )
+
 
 settings = Settings()
