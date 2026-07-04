@@ -27,7 +27,9 @@ uv run pytest
 - Per-clause risk analysis grounded in the taxonomy retrieval, with a verbatim-quote gate that drops flags whose supporting quote is not a literal substring of the source clause.
 - A LangGraph `interrupt()` pauses the analysis after ranking so a human can accept or reject each flag. State persists to a SQLite checkpointer, so a session can resume after a full process restart.
 - A drafting node produces a `Redline` for every accepted flag, using the LLM to write a minimal-edit revised clause with a justification. Every redline is gated by a substring check against the source clause.
-- 58 tests, mypy strict, ruff clean.
+- An evaluation harness that runs the analysis pipeline against three hand-labelled contracts and produces a Markdown report with precision, recall, F1, hallucination rate, and retrieval quality metrics. See [evals/reports/latest.md](evals/reports/latest.md).
+- Response caching that keeps the eval deterministic and cheap to re-run.
+- 74 tests, mypy strict, ruff clean.
 
 ## Local database
 
@@ -57,6 +59,18 @@ uv run python scripts/run_analysis.py --resume <thread_id>
 uv run python scripts/run_analysis.py fixtures/sample_msa.pdf \
   --decisions decisions.json --output redlines.md
 ```
+
+## Evaluate the pipeline
+
+```bash
+# use the committed cache (deterministic, no AWS calls)
+uv run python -m evals --mode replay
+
+# rebuild the cache from real Bedrock (costs money, updates evals/cache/)
+uv run python -m evals --mode record
+```
+
+The scored report lands at [evals/reports/latest.md](evals/reports/latest.md).
 
 ## Architecture
 
