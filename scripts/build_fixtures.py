@@ -19,10 +19,12 @@ from reportlab.lib.styles import ParagraphStyle, getSampleStyleSheet
 from reportlab.lib.units import inch
 from reportlab.platypus import Paragraph, SimpleDocTemplate, Spacer
 
-FIXTURES_DIR = Path(__file__).resolve().parent.parent / "fixtures"
+REPO_ROOT = Path(__file__).resolve().parent.parent
+FIXTURES_DIR = REPO_ROOT / "fixtures"
 SOURCE = FIXTURES_DIR / "sample_msa.md"
 PDF_OUT = FIXTURES_DIR / "sample_msa.pdf"
 DOCX_OUT = FIXTURES_DIR / "sample_msa.docx"
+EVAL_FIXTURES_DIR = REPO_ROOT / "evals" / "fixtures"
 
 
 @dataclass(frozen=True)
@@ -117,15 +119,30 @@ def build_docx(blocks: list[Block], out: Path) -> None:
     document.save(str(out))
 
 
+def _build_from_markdown(source: Path, pdf_out: Path, docx_out: Path) -> None:
+    blocks = parse_markdown(source.read_text(encoding="utf-8"))
+    build_pdf(blocks, pdf_out)
+    build_docx(blocks, docx_out)
+    print(f"  {pdf_out}")
+    print(f"  {docx_out}")
+
+
+def _build_eval_fixtures() -> None:
+    if not EVAL_FIXTURES_DIR.exists():
+        return
+    for source in sorted(EVAL_FIXTURES_DIR.glob("*/contract.md")):
+        blocks = parse_markdown(source.read_text(encoding="utf-8"))
+        pdf_out = source.with_name("contract.pdf")
+        build_pdf(blocks, pdf_out)
+        print(f"  {pdf_out}")
+
+
 def main() -> None:
     if not SOURCE.exists():
         raise SystemExit(f"Missing source markdown: {SOURCE}")
-    blocks = parse_markdown(SOURCE.read_text(encoding="utf-8"))
-    build_pdf(blocks, PDF_OUT)
-    build_docx(blocks, DOCX_OUT)
     print("Wrote fixtures:")
-    print(f"  {PDF_OUT}")
-    print(f"  {DOCX_OUT}")
+    _build_from_markdown(SOURCE, PDF_OUT, DOCX_OUT)
+    _build_eval_fixtures()
 
 
 if __name__ == "__main__":
