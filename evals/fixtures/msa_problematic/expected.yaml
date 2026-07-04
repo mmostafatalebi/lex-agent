@@ -1,0 +1,24 @@
+name: msa_problematic
+contract_path: evals/fixtures/msa_problematic/contract.pdf
+expected_document_type: msa
+expected_flags:
+  - clause_hint: "Limitation of Liability"
+    expected_severity: dealbreaker
+    risk_category: unlimited_liability
+    verbatim_hint: "unlimited liability"
+  - clause_hint: "Intellectual Property Assignment"
+    expected_severity: dealbreaker
+    risk_category: broad_ip_assignment
+    verbatim_hint: "pre-existing"
+  - clause_hint: "Term and Termination"
+    expected_severity: important
+    risk_category: one_sided_termination
+    verbatim_hint: "at any time, for any reason"
+  - clause_hint: "Non-Competition"
+    expected_severity: important
+    risk_category: overbroad_non_compete
+    verbatim_hint: "three (3) years"
+  - clause_hint: "Payment Terms"
+    expected_severity: important
+    risk_category: missing_payment_timeline
+    verbatim_hint: "following receipt and review"

@@ -1,0 +1,20 @@
+name: sow_ambiguous
+contract_path: evals/fixtures/sow_ambiguous/contract.pdf
+expected_document_type: sow
+expected_flags:
+  - clause_hint: "Scope of Services"
+    expected_severity: important
+    risk_category: vague_scope
+    verbatim_hint: "as needed"
+  - clause_hint: "Deliverables and Acceptance"
+    expected_severity: important
+    risk_category: vague_scope
+    verbatim_hint: "does not set out specific acceptance criteria"
+  - clause_hint: "Change Control"
+    expected_severity: dealbreaker
+    risk_category: one_sided_amendment
+    verbatim_hint: "in its sole discretion"
+  - clause_hint: "Fees and Payment"
+    expected_severity: important
+    risk_category: missing_payment_timeline
+    verbatim_hint: "the Client's satisfaction"

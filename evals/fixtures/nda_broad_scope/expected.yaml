@@ -1,0 +1,16 @@
+name: nda_broad_scope
+contract_path: evals/fixtures/nda_broad_scope/contract.pdf
+expected_document_type: nda
+expected_flags:
+  - clause_hint: "Term"
+    expected_severity: dealbreaker
+    risk_category: indefinite_term
+    verbatim_hint: "in perpetuity"
+  - clause_hint: "Definition of Confidential Information"
+    expected_severity: important
+    risk_category: broad_confidentiality
+    verbatim_hint: "any and all information of any kind whatsoever"
+  - clause_hint: "Indemnification"
+    expected_severity: dealbreaker
+    risk_category: unlimited_liability
+    verbatim_hint: "without any cap or limitation"
