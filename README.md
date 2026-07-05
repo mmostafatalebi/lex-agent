@@ -29,7 +29,9 @@ uv run pytest
 - A drafting node produces a `Redline` for every accepted flag, using the LLM to write a minimal-edit revised clause with a justification. Every redline is gated by a substring check against the source clause.
 - An evaluation harness that runs the analysis pipeline against three hand-labelled contracts and produces a Markdown report with precision, recall, F1, hallucination rate, and retrieval quality metrics. See [evals/reports/latest.md](evals/reports/latest.md).
 - Response caching that keeps the eval deterministic and cheap to re-run.
-- 74 tests, mypy strict, ruff clean.
+- An HTTP API that walks through the full contract-review flow (upload → analyze → review → decisions → redlines) over six REST endpoints, deployed to AWS Lambda behind API Gateway.
+- Infrastructure as code in Python CDK: Aurora Serverless v2 Postgres (scales to zero), S3 for uploaded contracts, single Lambda serving all routes via `aws-lambda-powertools`.
+- 99 tests, mypy strict, ruff clean.
 
 ## Local database
 
@@ -71,6 +73,45 @@ uv run python -m evals --mode record
 ```
 
 The scored report lands at [evals/reports/latest.md](evals/reports/latest.md).
+
+## Deploy to AWS
+
+```bash
+# One-time
+uv sync --group infra
+uv run cdk bootstrap  # per account/region
+
+# Synthesize CloudFormation (no credentials needed)
+uv run --group infra cdk synth --quiet
+
+# Deploy (builds and pushes the container image, then updates the stack)
+uv run cdk deploy
+
+# The API URL and secret ARNs are in the CDK outputs.
+export API_URL=https://xxx.execute-api.us-east-1.amazonaws.com
+export API_KEY=your-key
+
+# Upload a contract
+curl -X POST "$API_URL/contracts" \
+  -H "x-api-key: $API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{"filename": "sample.pdf", "content_base64": "'"$(base64 -i fixtures/sample_msa.pdf)"'"}'
+```
+
+### Endpoints
+
+- `POST /contracts` — upload a base64 PDF/DOCX, returns a content-addressed `contract_id`.
+- `POST /analyses` — start analysis for a `contract_id`; runs until the human-review pause.
+- `GET /analyses/{thread_id}` — current status and flags.
+- `POST /analyses/{thread_id}/decisions` — submit accept/reject decisions; drafts redlines.
+- `GET /analyses/{thread_id}/results` — final redlines once the analysis is complete.
+
+### Cost profile
+
+Aurora Serverless v2 scales to a minimum of 0 ACU and the Lambda cold path bills
+only on use, so an idle stack costs roughly $0/day for compute (VPC interface
+endpoints are the small standing cost). A warm analyzed contract is on the order
+of $0.01 in Bedrock calls.
 
 ## Architecture
 
