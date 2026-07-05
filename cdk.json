@@ -1,0 +1,6 @@
+{
+  "app": "python -m infra.app",
+  "context": {
+    "@aws-cdk/aws-lambda:recognizeLayerVersion": true
+  }
+}
