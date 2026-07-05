@@ -8,6 +8,42 @@ import pytest
 from pytest_mock import MockerFixture
 
 
+def make_http_event(
+    method: str,
+    path: str,
+    body: str | None = None,
+    headers: dict[str, str] | None = None,
+) -> dict[str, Any]:
+    """Build a minimal API Gateway HTTP API (v2) event for the resolver."""
+    return {
+        "version": "2.0",
+        "routeKey": f"{method} {path}",
+        "rawPath": path,
+        "rawQueryString": "",
+        "headers": headers or {},
+        "requestContext": {
+            "accountId": "123456789012",
+            "apiId": "api",
+            "domainName": "api.example.com",
+            "domainPrefix": "api",
+            "http": {
+                "method": method,
+                "path": path,
+                "protocol": "HTTP/1.1",
+                "sourceIp": "127.0.0.1",
+                "userAgent": "pytest",
+            },
+            "requestId": "req-1",
+            "routeKey": f"{method} {path}",
+            "stage": "$default",
+            "time": "01/Jan/2026:00:00:00 +0000",
+            "timeEpoch": 1767225600,
+        },
+        "body": body,
+        "isBase64Encoded": False,
+    }
+
+
 @pytest.fixture
 def fixtures_dir() -> Path:
     return Path(__file__).parent.parent / "fixtures"
