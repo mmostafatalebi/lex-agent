@@ -28,6 +28,10 @@ coverage.xml
 # Checkpointer data
 /.data/
 
+# CDK synth output
+cdk.out/
+.aws-sam/
+
 # The eval response cache is committed on purpose for reproducible offline runs.
 !evals/cache/
 
