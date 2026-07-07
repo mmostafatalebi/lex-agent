@@ -31,6 +31,7 @@ uv run pytest
 - Response caching that keeps the eval deterministic and cheap to re-run.
 - An HTTP API that walks through the full contract-review flow (upload → analyze → review → decisions → redlines) over six REST endpoints, deployed to AWS Lambda behind API Gateway.
 - Infrastructure as code in Python CDK: Aurora Serverless v2 Postgres (scales to zero), S3 for uploaded contracts, single Lambda serving all routes via `aws-lambda-powertools`.
+- A Next.js 14 web app in `web/` that talks to the deployed API: drag-and-drop upload, flag review with accept/reject, redlines side by side. Deployable to Vercel or any Next.js-compatible host.
 - 99 tests, mypy strict, ruff clean.
 
 ## Local database
@@ -73,6 +74,25 @@ uv run python -m evals --mode record
 ```
 
 The scored report lands at [evals/reports/latest.md](evals/reports/latest.md).
+
+## Run the web app
+
+```bash
+cd web
+cp .env.example .env.local
+# edit NEXT_PUBLIC_API_URL to point at your backend, or set NEXT_PUBLIC_USE_MOCK=true
+npm install
+npm run dev
+# open http://localhost:3000
+```
+
+Deploy the frontend to Vercel:
+
+```bash
+cd web
+vercel deploy
+# set NEXT_PUBLIC_API_URL in the Vercel dashboard to your deployed API Gateway URL
+```
 
 ## Deploy to AWS
 
