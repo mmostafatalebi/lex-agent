@@ -1,0 +1,76 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 240 10% 12%;
+    --panel: 240 6% 97%;
+    --panel-2: 240 5% 92%;
+    --card: 0 0% 100%;
+    --card-foreground: 240 10% 12%;
+    --muted: 240 5% 92%;
+    --muted-foreground: 240 4% 44%;
+    --secondary: 240 5% 92%;
+    --secondary-foreground: 240 10% 16%;
+    --accent: 240 5% 92%;
+    --accent-foreground: 240 10% 16%;
+    --border: 240 6% 86%;
+    --input: 240 6% 86%;
+    --primary: 160 84% 30%;
+    --primary-foreground: 0 0% 100%;
+    --destructive: 350 78% 48%;
+    --destructive-foreground: 0 0% 100%;
+    --ring: 160 84% 34%;
+    --emerald: 160 84% 34%;
+    --rose: 350 78% 48%;
+    --amber: 38 92% 42%;
+    --cyan: 190 80% 36%;
+    --radius: 0.6rem;
+  }
+
+  .dark {
+    --background: 240 10% 6%;
+    --foreground: 240 6% 92%;
+    --panel: 240 8% 10%;
+    --panel-2: 240 7% 15%;
+    --card: 240 9% 9%;
+    --card-foreground: 240 6% 92%;
+    --muted: 240 7% 15%;
+    --muted-foreground: 240 5% 62%;
+    --secondary: 240 7% 15%;
+    --secondary-foreground: 240 6% 92%;
+    --accent: 240 7% 15%;
+    --accent-foreground: 240 6% 92%;
+    --border: 240 6% 18%;
+    --input: 240 6% 20%;
+    --primary: 158 64% 46%;
+    --primary-foreground: 240 10% 6%;
+    --destructive: 350 80% 60%;
+    --destructive-foreground: 240 10% 6%;
+    --ring: 158 64% 46%;
+    --emerald: 158 64% 52%;
+    --rose: 350 82% 64%;
+    --amber: 40 92% 60%;
+    --cyan: 190 85% 58%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-feature-settings:
+      "rlig" 1,
+      "calt" 1;
+  }
+  .klabel {
+    @apply font-mono text-xs uppercase tracking-widest text-muted-foreground;
+  }
+  .panel-block {
+    @apply rounded-md border border-border bg-panel-2 p-3 font-mono text-sm leading-relaxed;
+  }
+}
