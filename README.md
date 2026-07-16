@@ -4,6 +4,12 @@ A contract review agent for freelancers and small businesses. Upload a contract,
 
 Under active development.
 
+## Live demo
+
+**https://lex-agent-livid.vercel.app**
+
+Drop a PDF or DOCX contract, watch the graph classify each clause, then approve or reject the drafted redlines. The demo runs against an in-memory mock so it is always available; the real analysis pipeline uses Claude 3.5 Sonnet via Bedrock and the same taxonomy retrieval documented below.
+
 ## Quick start
 
 ```bash
